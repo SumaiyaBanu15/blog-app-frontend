@@ -48,6 +48,7 @@ try {
         <div className="container">
           <div className="row">
             <div className="col-md-9 text-center ps-4">
+              <h2>Blog App</h2>
               <h3 className="login-heading mb-4">Let&apos;s Login Your Account</h3>
             </div>
               <Form>
