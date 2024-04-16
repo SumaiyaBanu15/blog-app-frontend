@@ -1,8 +1,13 @@
-# React + Vite
+Blog-App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+=> This App is used to create blogs.
 
-Currently, two official plugins are available:
+=> User can able to create blogs.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+=> The created blogs are send for approved to admin, once the admin will approved the blogs, the approved blogs will be displayed on the home page.
+
+=> User landed on home page and user can't seen all the blogs in the site
+
+=> Admin landed on Dashboard, Where is all blogs displayed in this site, Admin only seen all the blogs created by users and take decision to approve or reject.
+
+=> Users created blogs are in pending state, Still Admin will take the decision.
