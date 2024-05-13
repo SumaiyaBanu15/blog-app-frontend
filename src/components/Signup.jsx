@@ -1,4 +1,4 @@
-import React,{ useState } from 'react'
+import React,{ useEffect, useState } from 'react'
 import AxiosService from '../utils/ApiService'
 // import UseLogout from '../hooks/UseLogout'
 import { Link, useNavigate } from 'react-router-dom'
@@ -11,13 +11,76 @@ function Signup() {
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password,setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [firstNameRes, setFirstNameRes] = useState('');
+  const [lastNameRes, setLastNameRes] = useState('');
+  const [emailRes, setEmailRes] = useState('');
+  const [pswdRes, setPswdRes] = useState('');
+  const [confirmPswdRes, setConfirmPswdRes] = useState('');
+  const [submit, setSubmit] = useState(false);
+
   // const logout = UseLogout()
   const navigate = useNavigate()
 
-  const handleSignUp = async()=>{
-    try {
-      const res = await AxiosService.post(`/user/signup`, {firstName,lastName,email,password})
+  let emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
 
+  useEffect(()=>{
+    clearError();
+  },[firstName, lastName, password,email]);
+
+  const clearError = () => {
+    setFirstNameRes('');
+    setLastNameRes('');
+    setEmailRes('');
+    setPswdRes('');
+    setConfirmPswdRes('');
+  }
+  
+  const handleSignUp = async(e)=>{
+    e.preventDefault();
+
+    clearError();
+
+    if(firstName.length < 2){
+      setFirstNameRes(
+        "First name should be at least above 2 characters long!"
+      );
+      return;
+    }
+    if(lastName.length < 2){
+      setLastNameRes(
+        "Last name should be at least above 2 characters long!"
+      );
+      return;
+    }
+    if(!emailPattern.test(email)){
+      setEmailRes(
+        "Email should be in correct format"
+      )
+      return;
+    }
+    if(password.length < 3){
+      setPswdRes(
+        "Password should be at least greater than 3 characters, Make Strong password!"
+      )
+      return;
+    }
+    if(password !== confirmPassword){
+      setConfirmPswdRes(
+        "Password doesn't match with confirm password"
+      )
+      return;
+    }
+setSubmit(true);
+
+    try {
+      const res = await AxiosService.post(`/user/signup`, {firstName,lastName,email,password,confirmPassword});
+      setFirstName("");
+      setLastName("");
+      setEmail("")
+      setPassword("");
+      setConfirmPassword("");
+    
       if(res.status === 201){
         toast.success(res.data.message)
         navigate('/home')
@@ -27,6 +90,7 @@ function Signup() {
       toast.error(error.response.data.message)
   
     }
+    setSubmit(false);
   }
   return <>
   
@@ -41,31 +105,43 @@ function Signup() {
               <h3 className="login-heading mb-4">Let&apos;s Create Your Account</h3>
             </div>
               <Form>
-
+               
                 <Form.Group className="mb-3">
                   <Form.Label>First Name</Form.Label>
                   <Form.Control type="text" placeholder="Enter your name" onChange={(e)=>setFirstName(e.target.value)} />
                 </Form.Group>
+                {firstNameRes && <p className="text-danger">{firstNameRes}</p>}
 
                 <Form.Group className="mb-3">
                   <Form.Label>Last Name</Form.Label>
                   <Form.Control type="text" placeholder="Enter your name" onChange={(e)=>setLastName(e.target.value)} />
                 </Form.Group>
+                {lastNameRes && <p className="text-danger">{lastNameRes}</p>}
 
                 <Form.Group className="mb-3">
                   <Form.Label>Email address</Form.Label>
                   <Form.Control type="email" placeholder="Enter email" onChange={(e)=>setEmail(e.target.value)} />
                 </Form.Group>
+                {emailRes && <p className="text-danger">{emailRes}</p>}
 
                 <Form.Group className="mb-3">
                   <Form.Label>Password</Form.Label>
                   <Form.Control type="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} />
                 </Form.Group>
+                {pswdRes && <p className="text-danger">{pswdRes}</p>}
+
+                <Form.Group className="mb-3">
+                  <Form.Label>Confirm Password</Form.Label>
+                  <Form.Control type="password" placeholder="Confirm Password" onChange={(e)=>setConfirmPassword(e.target.value)} />
+                </Form.Group>
+                {confirmPswdRes && <p className="text-danger">{confirmPswdRes}</p>}
 
                 <div className='col-md-9 text-center'>
-                <Button variant="primary" onClick= {(e)=>handleSignUp(e)}>
+                  {/* {submit && ( */}
+                <Button variant="primary" onClick= {(e)=>handleSignUp(e)} disabled={submit}>
                   Sign Up
                 </Button>
+                {/* )} */}
                 <br />
                 <br />
                 Already a Member? <Link to={'/login'}>Login</Link>
