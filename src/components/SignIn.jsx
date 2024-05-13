@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -10,14 +10,48 @@ import UseLogout from '../hooks/UseLogout';
 function SignIn() {
   let [email, setEmail] = useState('')
   let [password, setPassword] = useState('')
+  let [emailRes, setEmailRes] = useState('');
+  let [pswdRes, setPswdRes] = useState('');
+  let [submit, setSubmit] = useState(false);
   let navigate = useNavigate()
   let logout = UseLogout()
-  let handleLogin = async()=>{
+
+  let emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+  
+  useEffect(()=>{
+    clearError();
+  },[email,password]);
+
+  let clearError = () => {
+    setEmailRes('');
+    setPswdRes('');
+  }
+
+  let handleLogin = async(e)=>{
+    e.preventDefault();
+
+    clearError();
+    if(!emailPattern.test(email)){
+      setEmailRes(
+        "Email should be in correct format"
+      )
+      return;
+    }
+    if(password.length < 3){
+      setPswdRes(
+        "Password should be at least greater than 3 characters, Make Strong password!"
+      )
+      return;
+    }
+    setSubmit(true);
+    
 try {
   let res = await AxiosService.post('/user/login', {
     email,
     password
-  })
+  });
+  setEmail(''),
+  setPassword('');
 
   if(res.status===200){
     toast.success(res.data.message)
@@ -37,6 +71,7 @@ try {
   if(error.response.status === 401){
     logout()
   }
+  setSubmit(false)
 }
 
   }
@@ -57,14 +92,16 @@ try {
                   <Form.Label>Email address</Form.Label>
                   <Form.Control type="email" placeholder="Enter email" onChange={(e)=>setEmail(e.target.value)} />
                 </Form.Group>
+                {emailRes && <p className="text-danger">{emailRes}</p>}
 
                 <Form.Group className="mb-3">
                   <Form.Label>Password</Form.Label>
                   <Form.Control type="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} />
                 </Form.Group>
+                {pswdRes && <p className="text-danger">{pswdRes}</p>}
 
                 <div className='col-md-9 text-center'>
-                <Button variant="primary" onClick= {(e)=>handleLogin(e)}>
+                <Button variant="primary" onClick= {(e)=>handleLogin(e)} disabled={submit}>
                   Sign In
                 </Button>
                 <br />
