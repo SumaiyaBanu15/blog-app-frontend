@@ -40,32 +40,56 @@ function Signup() {
     e.preventDefault();
 
     clearError();
-
-    if(firstName.length < 2){
+    // First name Verification
+    if(firstName.trim() === ''){
+      setFirstNameRes("Please fill this input field");
+      return;
+    }
+    else if(firstName.length < 2){
       setFirstNameRes(
         "First name should be at least above 2 characters long!"
       );
       return;
     }
-    if(lastName.length < 2){
+    // Last name Verification
+    if(lastName.trim() === ''){
+      setLastNameRes("Please fill this input field");
+      return;
+    }
+    else if(lastName.length < 2){
       setLastNameRes(
         "Last name should be at least above 2 characters long!"
       );
       return;
     }
-    if(!emailPattern.test(email)){
+    // Email Verification
+    if(email.trim() === ''){
+      setEmailRes("Please fill the email field");
+      return;
+    }
+    else if(!emailPattern.test(email)){
       setEmailRes(
         "Email should be in correct format"
       )
       return;
     }
-    if(password.length < 3){
+    // Password Verification
+    if(password.trim() === ''){
+      setPswdRes("Please fill the password field");
+      return;
+    }
+    else if(password.length < 3){
       setPswdRes(
         "Password should be at least greater than 3 characters, Make Strong password!"
       )
       return;
     }
-    if(password !== confirmPassword){
+    // Confirm Password Verification
+    if(confirmPassword.trim() === ''){
+      setConfirmPswdRes("Please fill the confirm password field");
+      return;
+    }
+    else if(password !== confirmPassword){
       setConfirmPswdRes(
         "Password doesn't match with confirm password"
       )
@@ -108,31 +132,31 @@ setSubmit(true);
                
                 <Form.Group className="mb-3">
                   <Form.Label>First Name</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your name" onChange={(e)=>setFirstName(e.target.value)} />
+                  <Form.Control type="text" placeholder="Enter your name" onChange={(e)=>setFirstName(e.target.value)} required/>
                 </Form.Group>
                 {firstNameRes && <p className="text-danger">{firstNameRes}</p>}
 
                 <Form.Group className="mb-3">
                   <Form.Label>Last Name</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your name" onChange={(e)=>setLastName(e.target.value)} />
+                  <Form.Control type="text" placeholder="Enter your name" onChange={(e)=>setLastName(e.target.value)} required/>
                 </Form.Group>
                 {lastNameRes && <p className="text-danger">{lastNameRes}</p>}
 
                 <Form.Group className="mb-3">
                   <Form.Label>Email address</Form.Label>
-                  <Form.Control type="email" placeholder="Enter email" onChange={(e)=>setEmail(e.target.value)} />
+                  <Form.Control type="email" placeholder="Enter email" onChange={(e)=>setEmail(e.target.value)} required/>
                 </Form.Group>
                 {emailRes && <p className="text-danger">{emailRes}</p>}
 
                 <Form.Group className="mb-3">
                   <Form.Label>Password</Form.Label>
-                  <Form.Control type="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} />
+                  <Form.Control type="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} required/>
                 </Form.Group>
                 {pswdRes && <p className="text-danger">{pswdRes}</p>}
 
                 <Form.Group className="mb-3">
                   <Form.Label>Confirm Password</Form.Label>
-                  <Form.Control type="password" placeholder="Confirm Password" onChange={(e)=>setConfirmPassword(e.target.value)} />
+                  <Form.Control type="password" placeholder="Confirm Password" onChange={(e)=>setConfirmPassword(e.target.value)} required/>
                 </Form.Group>
                 {confirmPswdRes && <p className="text-danger">{confirmPswdRes}</p>}
 

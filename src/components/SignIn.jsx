@@ -31,13 +31,25 @@ function SignIn() {
     e.preventDefault();
 
     clearError();
-    if(!emailPattern.test(email)){
+
+    // Check if email or password is empty
+
+    if(email.trim() === ''){
+      setEmailRes("Please fill the email field");
+      return;
+    }
+    else if(!emailPattern.test(email)){
       setEmailRes(
         "Email should be in correct format"
       )
       return;
     }
-    if(password.length < 3){
+
+    if(password.trim() === ''){
+      setPswdRes("Please fill the password field");
+      return;
+    }
+    else if(password.length < 3){
       setPswdRes(
         "Password should be at least greater than 3 characters, Make Strong password!"
       )
@@ -90,13 +102,13 @@ try {
 
                 <Form.Group className="mb-3">
                   <Form.Label>Email address</Form.Label>
-                  <Form.Control type="email" placeholder="Enter email" onChange={(e)=>setEmail(e.target.value)} />
+                  <Form.Control type="email" placeholder="Enter email" onChange={(e)=>setEmail(e.target.value)} required/>
                 </Form.Group>
                 {emailRes && <p className="text-danger">{emailRes}</p>}
 
                 <Form.Group className="mb-3">
                   <Form.Label>Password</Form.Label>
-                  <Form.Control type="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} />
+                  <Form.Control type="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} required />
                 </Form.Group>
                 {pswdRes && <p className="text-danger">{pswdRes}</p>}
 
